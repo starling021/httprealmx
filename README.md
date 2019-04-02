@@ -16,4 +16,4 @@ pip install -r requirements.txt
 That's it!
 
 ## Documentation
-Is going to be here later.
+[Plugin documentation](https://github.com/crinny/httprealm/blob/master/docs/plugins.md)
