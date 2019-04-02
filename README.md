@@ -2,7 +2,6 @@
 HTTP proxy for Realm of the Mad God written in Python 3.6
 
 ## Installation
-Sadly no compiled binaries like .EXE are build yet 😒
 
 To build HTTPRealm from sources, simply use this commands:
 
