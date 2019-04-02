@@ -13,7 +13,7 @@ app = Flask(__name__)
 log = logging.getLogger('werkzeug')
 log.disabled = True  # We don't want Flask logs so disabling them.
 requests.packages.urllib3.disable_warnings(category=InsecureRequestWarning)  # Disable warnings about SSL.
-  
+
 title = r'''
   _     _   _                        _           
  | |   | | | |                      | |          
@@ -46,11 +46,11 @@ def proxy(path):
         server_response = requests.post(f'http://realmofthemadgodhrd.appspot.com/{path}', data=form, verify=False).text
     else:  # request.method == 'GET'
         server_response = requests.get(f'http://realmofthemadgodhrd.appspot.com/{path}', data=form, verify=False).text
-    if 'confidential' in args:  # Don't give GUID and password to any plugin
+    if 'confidential' in args:  # Don't give GUID and password to the plugin
         form.pop('guid', None)
         form.pop('password', None)
     for plugin in plugins:
-        if path in plugin.Plugin.url or '*' in plugin.Plugin.url:  # or path.split('/')[0] + '/*' in plugin.Plugin.url
+        if path in plugin.Plugin.url or '*' in plugin.Plugin.url:
             # Give an opportunity for plugin to process request.
             response = plugin.Plugin.on_call(plugin.Plugin, path, form, server_response)
     if response is None:  # No plugin was able to process request.
@@ -71,7 +71,7 @@ def is_admin():
     return bool(ctypes.windll.shell32.IsUserAnAdmin())
 
 
-def get_resource_path(relative_path):
+def get_resource_path(relative_path):  # Planning to compile EXE binaries using PyInstaller later.
     # Get absolute path to resource, works for dev and for PyInstaller.
     base_path = getattr(sys, '_MEIPASS', os.path.dirname(os.path.abspath(__file__)))
     return os.path.join(base_path, relative_path)
@@ -97,8 +97,8 @@ def update_hosts(host, redirect, stdout, add=True):
 
     subprocess.call('ipconfig /flushdns', stdout=stdout)  # Flush DNS records so changes will take effect immediately.
     try:
-        subprocess.call('nbtstat -R', stdout=stdout)  # Does not work on Windows 8 and lower i guess.
-    except FileNotFoundError:
+        subprocess.call('nbtstat -R', stdout=stdout)
+    except FileNotFoundError:  # Does not work on Windows 8 and lower i guess.
         pass
 
 
@@ -126,8 +126,10 @@ def main():
 
     with open(os.devnull, 'w') as trash:  # Send all command logs to dev/null and don't litter console with them.
         update_hosts('www.realmofthemadgod.com', '127.0.0.1', trash, True)
-        # Install realmproxy.crt as trusted certificate so the game will think that it is legit.
+        # Install realmproxy.crt as trusted certificate so the game will think it is legit.
         subprocess.call('certutil -addstore -enterprise Root realmofthemadgod.crt', stdout=trash)
+
+    print('\n * To gracefully exit press Ctrl-C')
 
     context = (get_resource_path('realmofthemadgod.crt'), get_resource_path('realmofthemadgod.key'))
     app.run(port=443, ssl_context=context, threaded=True)  # Run server with self-signed SSL certificate.
