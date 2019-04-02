@@ -4,4 +4,4 @@ python:
 install:
   - pip install -r requirements.txt
 script:
-  - python httprealm.py
+  - pip install -r requirements.txt
