@@ -15,7 +15,7 @@ class Plugin(BasePlugin):
     name = 'Example'
     version = '1.0'
 ```
-As you can see, there are some parameters i did not said about. These are `name` `name`, and `version`.
+As you can see, there are some parameters i did not said about. These are `url`, name`, and `version`.
 
 |Parameter|Type|Description|
 |-|-|-|
