@@ -9,7 +9,7 @@ Before installing you need to get [Python](https://www.python.org/downloads) 3.6
 
 To build HTTPRealm from sources, simply use this commands:
 
-``` {.sourceCode .bash}
+```bash
 git clone git://github.com/crinny/httprealm
 cd httprealm
 pip install -r requirements.txt
