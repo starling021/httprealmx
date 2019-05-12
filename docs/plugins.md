@@ -8,14 +8,14 @@ Every single plugin starts with the following import:
 ```python
 from httprealm import BasePlugin
 ```
-You must also provide a class name `Plugin` in your code. It must not be nested and must be inherited from `BasePlugin`.
+You must also provide a class named `Plugin` in your code. It must not be nested and must be inherited from `BasePlugin`.
 ```python
 class Plugin(BasePlugin):
     url = ['char/list']
     name = 'Example'
     version = '1.0'
 ```
-As you can see, there are some parameters i did not said about. These are `url`, name`, and `version`.
+As you can see, there are some parameters i did not said about. These are `url`, `name`, and `version`.
 
 |Parameter|Type|Description|
 |-|-|-|
