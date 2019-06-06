@@ -3,6 +3,7 @@ import ctypes
 import subprocess
 import sys
 import os
+import platform
 import logging
 from flask import Flask
 from flask import request
@@ -24,27 +25,30 @@ title = r'''
                | |                               
                |_|                               
 '''
-hosts_location = r'C:\Windows\System32\drivers\etc\hosts'
+if platform.system() == 'Windows':
+    hosts_location = r'C:\Windows\System32\drivers\etc\hosts'
+else:  # Consider everything else as *nix system.
+    hosts_location = 'etc/hosts'
 plugins = []
 args = []
 
 
 class BasePlugin:
-    def on_load(self, arguments):
+    def on_load(self, arguments: list):
         pass
 
-    def on_call(self, url, params, response):
+    def on_call(self, url: str, params: dict, response: str):
         raise NotImplementedError
 
 
 @app.route('/', defaults={'path': ''}, methods=['GET', 'POST'])
 @app.route('/<path:path>', methods=['GET', 'POST'])
-def proxy(path):
+def proxy(path: str):
     response = None
     form = request.form.to_dict()
     if request.method == 'POST':
         server_response = requests.post(f'http://realmofthemadgodhrd.appspot.com/{path}', data=form, verify=False).text
-    else:  # request.method == 'GET'
+    else:
         server_response = requests.get(f'http://realmofthemadgodhrd.appspot.com/{path}', data=form, verify=False).text
     if 'confidential' in args:  # Don't give GUID and password to the plugin
         form.pop('guid', None)
@@ -71,13 +75,13 @@ def is_admin():
     return bool(ctypes.windll.shell32.IsUserAnAdmin())
 
 
-def get_resource_path(relative_path):  # Planning to compile EXE binaries using PyInstaller later.
+def get_resource_path(relative_path: str):
     # Get absolute path to resource, works for dev and for PyInstaller.
     base_path = getattr(sys, '_MEIPASS', os.path.dirname(os.path.abspath(__file__)))
     return os.path.join(base_path, relative_path)
 
 
-def update_hosts(host, redirect, stdout, add=True):
+def update_hosts(host: str, redirect: str, stdout, add: bool = True):
     if add:
         with open(hosts_location, 'r+') as file:
             content = file.read()
@@ -98,10 +102,11 @@ def update_hosts(host, redirect, stdout, add=True):
     subprocess.call('ipconfig /flushdns', stdout=stdout)  # Flush DNS records so changes will take effect immediately.
     try:
         subprocess.call('nbtstat -R', stdout=stdout)
-    except FileNotFoundError:  # Does not work on Windows 8 and lower i guess.
+    except FileNotFoundError:  # Does not work on Windows 8 I guess.
         pass
 
 
+@atexit.register
 def cleanup():  # Do some cleanup before killing process.
     with open(os.devnull, 'w') as trash:  # Send all command logs to dev/null and don't litter console with them.
         update_hosts('www.realmofthemadgod.com', '127.0.0.1', trash, False)
@@ -109,7 +114,6 @@ def cleanup():  # Do some cleanup before killing process.
 
 def main():
     print(title)
-    atexit.register(cleanup)
 
     for argument in sys.argv[1:]:
         if argument == '--confidential' or argument == '-c':
