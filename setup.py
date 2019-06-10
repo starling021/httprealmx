@@ -13,7 +13,6 @@ setup(
     url='https://github.com/crinny/httprealm',
     author='crinny',
     classifiers=[
-        'Development Status :: 5 - Stable',
         'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7',
@@ -23,7 +22,7 @@ setup(
     install_requires=['flask', 'requests', 'pyOpenSSL'],
     entry_points={
         'console_scripts': [
-            'sample=sample:main',
+            'httprealm=httprealm:httprealm',
         ],
     },
 )
