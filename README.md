@@ -18,7 +18,7 @@ To start the proxy, execute this command:
 ```bash
 python httprealm.py
 ```
-That's it!
+That's it! No manipulations with client are required.
 
 ## Documentation
 [Plugin documentation](https://github.com/crinny/httprealm/blob/master/docs/plugins.md)
