@@ -18,7 +18,7 @@ setup(
         'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7',
     ],
-    packages=find_packages(exclude=['docs'])
+    packages=find_packages(exclude=['docs']),
     python_requires='>=3.5',
     install_requires=['flask', 'requests', 'pyOpenSSL'],
     entry_points={
