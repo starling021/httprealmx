@@ -14,7 +14,10 @@ git clone git://github.com/crinny/httprealm
 cd httprealm
 pip install -r requirements.txt
 ```
-
+To start the proxy, execute this command:
+```bash
+python httprealm.py
+```
 That's it!
 
 ## Documentation
